@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,10 +47,20 @@ namespace TestMLImage
             }
         }
 
-        private void buttonAnalyzeImage_Click(object sender, RoutedEventArgs e)
+        private async void buttonAnalyzeImage_ClickAsync(object sender, RoutedEventArgs e)
         {
-            // TODO 解析処理
-            textBlock.Text = "";
+            CustomVisionPredictionClient endpoint = new CustomVisionPredictionClient()
+            {
+                ApiKey = "",
+                Endpoint = "",
+            };
+
+            using (Stream image = File.OpenRead(fileName))
+            {
+                var result = await endpoint.ClassifyImageAsync(new Guid(""), "", image);
+
+                textBlock.Text = result.Predictions.OrderByDescending(p => p.Probability).FirstOrDefault().TagName;
+            }
         }
 
         /// <summary>
