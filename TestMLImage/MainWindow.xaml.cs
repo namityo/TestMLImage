@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using TestMLImageML.Model;
+
 namespace TestMLImage
 {
     /// <summary>
@@ -48,8 +50,15 @@ namespace TestMLImage
 
         private void buttonAnalyzeImage_Click(object sender, RoutedEventArgs e)
         {
+            // Add input data
+            var input = new ModelInput();
+            input.ImageSource = fileName;
+
+            // Load model and predict output of sample data
+            ModelOutput result = ConsumeModel.Predict(input);
+
             // TODO 解析処理
-            textBlock.Text = "";
+            textBlock.Text = result.Prediction;
         }
 
         /// <summary>
